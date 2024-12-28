@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Products - My Django App{% endblock title %}
+
+{% block content %}
+<div class="container mx-auto px-4">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Our Products</h1>
+        <p class="mt-2 text-gray-600">Showing {{ products|length }} products</p>
+    </div>
+
+    <!-- Quantity Selector -->
+    <div class="mb-6">
+        <form method="get" class="flex items-center space-x-4">
+            <label for="quantity" class="text-gray-700">Products per page:</label>
+            <select name="quantity" id="quantity" 
+                    class="form-select rounded-md border-gray-300 shadow-sm"
+                    onchange="this.form.submit()">
+                <option value="10" {% if current_quantity == 10 %}selected{% endif %}>10</option>
+                <option value="20" {% if current_quantity == 20 %}selected{% endif %}>20</option>
+                <option value="50" {% if current_quantity == 50 %}selected{% endif %}>50</option>
+                <option value="100" {% if current_quantity == 100 %}selected{% endif %}>100</option>
+            </select>
+        </form>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for product in products %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <!-- Product Image -->
+            <div class="relative h-48">
+                <img 
+                    src="https://picsum.photos/200/300" 
+                    alt="{{ product.name }}"
+                    class="w-full h-full object-cover"
+                    onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' fill=\'%239ca3af\'>Image Not Found</text></svg>'"
+                >
+            </div>
+
+            <!-- Product Details -->
+            <div class="p-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 line-clamp-1">{{ product.name }}</h2>
+                
+                <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ product.description }}</p>
+                
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-col">
+                        <span class="text-sm text-gray-500">Price</span>
+                        <span class="text-lg font-bold text-gray-900">${{ product.price|floatformat:2 }}</span>
+                    </div>
+                    
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2">
+                        {% for tag in product.tags|slice:":2" %}
+                            <span class="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
+                                {{ tag }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Product Codes -->
+                <div class="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-500">
+                    <div class="flex flex-col space-y-1">
+                        <span>EAN: {{ product.ean }}</span>
+                        <span>UPC: {{ product.upc }}</span>
+                        <span>Net Price: ${{ product.net_price|floatformat:2 }}</span>
+                        <span>Tax Rate: {{ product.taxes }}%</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-4 grid grid-cols-2 gap-2">
+                    <button
+                        class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md transition duration-300"
+                        onclick="alert('View details for {{ product.name }}')"
+                    >
+                        View Details
+                    </button>
+                    <button
+                        class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 px-4 rounded-md transition duration-300"
+                        onclick="alert('Add to cart: {{ product.name }}')"
+                    >
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                <p class="text-yellow-700">No products found. Please try again later.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

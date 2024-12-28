@@ -1,0 +1,110 @@
+{% load static %}
+{% load pwa %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% progressive_web_app_meta %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django App{% endblock title %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS -->
+    {% block extra_css %}{% endblock extra_css %}
+</head>
+<body class="min-h-screen bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Brand -->
+                <div class="flex items-center">
+                    <a href="/" class="text-xl font-bold text-gray-800">
+                        My App
+                    </a>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Home</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">About</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Contact</a>
+                    
+                    {% if user.is_authenticated %}
+                        <a href="#" class="text-gray-600 hover:text-gray-900">Profile</a>
+                        <a href="" class="text-gray-600 hover:text-gray-900">Logout</a>
+                    {% else %}
+                        <a href="" class="text-gray-600 hover:text-gray-900">Login</a>
+                        <a href="" class="text-gray-600 hover:text-gray-900">Register</a>
+                    {% endif %}
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button class="mobile-menu-button" aria-label="Toggle Menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="mobile-menu hidden md:hidden">
+                <div class="py-2 space-y-2">
+                    <a href="/" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Home</a>
+                    <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">About</a>
+                    <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Contact</a>
+                    
+                    {% if user.is_authenticated %}
+                        <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Profile</a>
+                        <a href="" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Logout</a>
+                    {% else %}
+                        <a href="" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Login</a>
+                        <a href="" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        {% if messages %}
+            <div class="messages mb-8">
+                {% for message in messages %}
+                    <div class="p-4 mb-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white shadow-lg mt-auto">
+        <div class="max-w-6xl mx-auto px-4 py-6">
+            <div class="text-center text-gray-600">
+                <p>&copy; {% now "Y" %} My Django App. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock extra_js %}
+</body>
+</html>
