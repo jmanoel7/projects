@@ -46,4 +46,4 @@ If you'd like to improve this demo or suggest changes:
 
 ## Watch the Tutorial
 
-For a detailed walkthrough of setting up a Django PWA, check out the YouTube video: [Insert Link Here].
+For a detailed walkthrough of setting up a Django PWA, check out the [YouTube video:](https://youtu.be/lteaqUZWk3E).
